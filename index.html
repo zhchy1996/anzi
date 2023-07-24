@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        html {
+            min-height: 100%
+        }
+        #app {
+            min-height: 100%
+        }
+        .addDialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            padding: 20px;
+            transform: translate(-50%, -50%);
+            border: 1px solid #000;
+            border-radius: 10px;
+        }
+        .choosed-list {
+            border: 1px solid #000;
+            border-radius: 10px;
+        }
+        .certifiedList-wrapper {
+            margin-top: 10px;
+            border: 1px solid #000;
+            border-radius: 10px;
+        }
+        .delete {
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <button @click="addClick">增加</button>
+
+        <div class="choosed-list">
+            <h4>已选择国家</h4>
+            <div v-for="(item, index) in pickedCountrys">
+                {{item.continent}} {{item.country}}
+                <span class="delete" @click="handleDelete(index)">X</span>
+            </div>
+        </div>
+        <div class="certifiedList-wrapper">
+            <div v-for="item in certifiedList" class="item">
+                {{ item }}
+            </div>
+        </div>
+        <div class="certifiedList-wrapper">
+            <div v-for="item in experimentList" class="item">
+                {{ item }}
+            </div>
+        </div>
+
+
+        <div v-if="showAdd" class="addDialog">
+            <div class="select-wrapper">
+                <select name="continent" id="continent" @change="continentChangeHandler" >
+                    <option value="empty">choose</option>
+                    <option v-for="item in continentList" :value="item">{{ item }}</option>
+                </select>
+
+                <select name="country" v-show="countryList.length" @change="countryChangeHandler">
+                    <option value="empty">choose</option>
+                    <option v-for="item in countryList" :value="item">{{ item }}</option>
+                </select>
+            </div>
+
+                <button @click="confirm">confirm</button>
+        </div>
+    </div>
+
+    <script>
+        const certifiedData = {"亚洲":{"A":{"认证A":true,"认证B":true,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":false},"B":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":false},"C":{"认证A":false,"认证B":true,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":true},"D":{"认证A":false,"认证B":false,"认证C":true,"认证D":false,"认证E":false,"认证F":false,"认证G":false}},"非洲":{"E":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":true,"认证G":false},"F":{"认证A":true,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":false}},"北美洲":{"G":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":true,"认证F":false,"认证G":false},"H":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":true}}};
+
+        const experimentData = {"亚洲":{"B":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":false},"C":{"认证A":false,"认证B":true,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":true},"D":{"认证A":false,"认证B":false,"认证C":true,"认证D":false,"认证E":false,"认证F":false,"认证G":false}},"非洲":{"E":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":true,"认证G":false},"F":{"认证A":true,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":false}},"北美洲":{"G":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":true,"认证F":false,"认证G":false},"H":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":true}}}
+
+        const { createApp, ref, reactive, computed } = Vue
+
+        createApp({
+            setup() {
+                const continentList = reactive(Object.keys(certifiedData));
+                const showAdd = ref(false);
+                let continentValue = ref('');
+                let countryValue = ref('');
+                let pickedCountrys = ref([]);
+
+                // methods
+                function addClick() {
+                    showAdd.value = true;
+                }
+
+                function continentChangeHandler(e) {
+                    const {value} = e.target;
+                    if (value === 'empty') return;
+                    continentValue.value = value;
+                    countryList.value= Object.keys(certifiedData[continentValue.value]);
+                }
+
+                function countryChangeHandler(e) {
+                    const {value} = e.target;
+                    console.log(value)
+                    if (value === 'empty') return;
+                    countryValue.value = value;
+                }
+
+                function confirm() {
+                    pickedCountrys.value.push({
+                        continent: continent.value,
+                        country: countryValue.value
+                    })
+                    resetDialog();
+                }
+
+                function resetDialog() {
+                    showAdd.value = false;
+                    continentValue.vlaue = '';
+                    countryValue.value = '';
+                }
+
+                function handleDelete(index) {
+                    pickedCountrys.value.splice(index, 1);
+                }
+
+                // computed
+                const countryList = computed(() => {
+                    if (!continentValue.value) return [];
+                    return Object.keys(certifiedData[continentValue.value]);
+                })
+
+                const certifiedList = computed(() => {
+                    const countrys = pickedCountrys.value;
+                    const obj = {};
+                    const countrysKeys = Object.keys(countrys)
+                    for (let i = 0; i < countrysKeys.length; i++) {
+                        const {continent, country} = countrys[countrysKeys[i]];
+                        const cList = Object.keys(certifiedData[continent][country]);
+                        for (let j = 0; j < cList.length; j++) {
+                            const key = cList[j];
+                            if (obj[key] !== undefined) {
+                                if (certifiedData[continent][country][key]) obj[key] = 1;
+                            } else {
+                                obj[key] = (certifiedData[continent][country][key]) ? 1 : 0;
+                            }
+                        }
+                    }
+                    const resKeys = Object.keys(obj);
+                    const res = [];
+                    for (let i = 0; i < resKeys.length; i++) {
+                        if (obj[resKeys[i]]) {
+                            res.push(resKeys[i])
+                        }
+                    }
+                    console.log(obj, res)
+                    return res;
+                })
+
+                const experimentList = computed(() => {
+                    const countrys = pickedCountrys.value;
+                    const obj = {};
+                    const countrysKeys = Object.keys(countrys)
+                    for (let i = 0; i < countrysKeys.length; i++) {
+                        const {continent, country} = countrys[countrysKeys[i]];
+                        if (!experimentData[continent]) continue;
+                        if (experimentData[continent] && !experimentData[continent][country]) continue;
+                        const cList = Object.keys(experimentData[continent][country]);
+                        for (let j = 0; j < cList.length; j++) {
+                            const key = cList[j];
+                            if (obj[key] !== undefined) {
+                                if (experimentData[continent][country][key]) obj[key] = 1;
+                            } else {
+                                obj[key] = (experimentData[continent][country][key]) ? 1 : 0;
+                            }
+                        }
+                    }
+                    const resKeys = Object.keys(obj);
+                    const res = [];
+                    for (let i = 0; i < resKeys.length; i++) {
+                        if (obj[resKeys[i]]) {
+                            res.push(resKeys[i])
+                        }
+                    }
+                    console.log(obj, res)
+                    return res;
+                })
+
+                
+                return {
+                    continentList,
+                    showAdd,
+                    continentValue,
+                    countryList,
+                    countryValue,
+                    pickedCountrys,
+                    certifiedList,
+                    experimentList,
+
+                    addClick,
+                    continentChangeHandler,
+                    countryChangeHandler,
+                    confirm,
+                    handleDelete
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
