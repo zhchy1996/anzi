@@ -12,6 +12,9 @@
         #app {
             min-height: 100%
         }
+        h4 {
+            margin: 0;
+        }
         .addDialog {
             position: fixed;
             top: 50%;
@@ -22,10 +25,12 @@
             border-radius: 10px;
         }
         .choosed-list {
+            padding: 10px;
             border: 1px solid #000;
             border-radius: 10px;
         }
         .certifiedList-wrapper {
+            padding: 10px;
             margin-top: 10px;
             border: 1px solid #000;
             border-radius: 10px;
@@ -38,21 +43,23 @@
 </head>
 <body>
     <div id="app">
-        <button @click="addClick">增加</button>
+        <button @click="addClick">仕向地追加</button>
 
         <div class="choosed-list">
-            <h4>已选择国家</h4>
+            <h4>就仕向地</h4>
             <div v-for="(item, index) in pickedCountrys">
                 {{item.continent}} {{item.country}}
                 <span class="delete" @click="handleDelete(index)">X</span>
             </div>
         </div>
         <div class="certifiedList-wrapper">
+            <h4>法規・認証</h4>
             <div v-for="item in certifiedList" class="item">
                 {{ item }}
             </div>
         </div>
         <div class="certifiedList-wrapper">
+            <h4>必要試験</h4>
             <div v-for="item in experimentList" class="item">
                 {{ item }}
             </div>
@@ -72,14 +79,14 @@
                 </select>
             </div>
 
-                <button @click="confirm">confirm</button>
+                <button style="margin-top: 10px" @click="confirm">confirm</button>
         </div>
     </div>
 
     <script>
         const certifiedData = {"亚洲":{"A":{"认证A":true,"认证B":true,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":false},"B":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":false},"C":{"认证A":false,"认证B":true,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":true},"D":{"认证A":false,"认证B":false,"认证C":true,"认证D":false,"认证E":false,"认证F":false,"认证G":false}},"非洲":{"E":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":true,"认证G":false},"F":{"认证A":true,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":false}},"北美洲":{"G":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":true,"认证F":false,"认证G":false},"H":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":true}}};
 
-        const experimentData = {"亚洲":{"B":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":false},"C":{"认证A":false,"认证B":true,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":true},"D":{"认证A":false,"认证B":false,"认证C":true,"认证D":false,"认证E":false,"认证F":false,"认证G":false}},"非洲":{"E":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":true,"认证G":false},"F":{"认证A":true,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":false}},"北美洲":{"G":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":true,"认证F":false,"认证G":false},"H":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":true}}}
+        const experimentData = {}
 
         const { createApp, ref, reactive, computed } = Vue
 
