@@ -93,9 +93,16 @@
             border-radius: 10px;
             width: 100%;
         }
+        .required >h4 {
+            color: red;
+        }
         .certifiedList-wrapper > div {
             border-bottom: 1px solid #000;
             margin-bottom: 4px;
+        }
+        .certifiedList-wrapper img {
+            max-width: 800px;
+            max-height: 1000px;
         }
         .delete {
             color: red;
@@ -127,7 +134,7 @@
                     {{ item }}
                 </div>
             </div>
-            <div class="certifiedList-wrapper">
+            <div class="certifiedList-wrapper required">
                 <h4>法規要認証</h4>
                 <div v-for="item in notsureList" class="item">
                     {{ item.cer }} - {{ item.country}}
@@ -135,8 +142,10 @@
             </div>
             <div class="certifiedList-wrapper">
                 <h4>必要試験</h4>
-                <div v-for="item in experimentList" class="item">
+                <div v-for="(item, index) in experimentList" class="item">
                     {{ item }}
+                    <!-- <span @click="picHandler(index, !picVisible[index])">図</span> -->
+                    <!-- <img v-if="picVisible[index]" :src="`./${item}.jpg`" alt=""> -->
                 </div>
             </div>
             </div>
@@ -171,9 +180,9 @@
     </div>
 
     <script>
-        const certifiedData = {"亚洲":{"A":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"notsure","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"B":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"C":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"},"D":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"confirm","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"非洲":{"E":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"confirm","认证G":"no"},"F":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"北美洲":{"G":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"confirm","认证F":"no","认证G":"no"},"H":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"}}};
+        const certifiedData = {"亚洲":{"A":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"notsure","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"B":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"C":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"confirm","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"},"D":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"confirm","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"非洲":{"E":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"confirm","认证G":"no"},"F":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"北美洲":{"G":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"confirm","认证F":"no","认证G":"no"},"H":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"}}};
 
-        const experimentData = {"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":["实验1","实验4"],"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":[],"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":["实验4"],"认证D":[],"认证E":["实验3"],"认证F":[],"认证G":[]}
+        const experimentData = {"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":["实验1","实验4"],"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":[],"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":["实验4"],"认证D":[],"认证E":["实验3"],"认证F":[],"认证G":[]};
 
         const { createApp, ref, reactive, computed } = Vue
 
@@ -184,6 +193,7 @@
                 let continentValue = ref('');
                 let countryValue = ref('');
                 let pickedCountrys = ref([]);
+                const picVisible = ref({});
 
                 // methods
                 function addClick() {
@@ -221,6 +231,10 @@
 
                 function handleDelete(index) {
                     pickedCountrys.value.splice(index, 1);
+                }
+
+                function picHandler(index, val) {
+                    picVisible.value[index] = val;
                 }
 
                 // computed
@@ -293,8 +307,7 @@
                         acc = [...acc, ...experimentData[v]];
                         return acc;
                     }, [])
-                    console.log(res)
-                    return res
+                    return Array.from(new Set(res));
                 })
 
                 
@@ -308,12 +321,14 @@
                     certifiedList,
                     experimentList,
                     notsureList,
+                    picVisible,
 
                     addClick,
                     continentChangeHandler,
                     countryChangeHandler,
                     confirm,
-                    handleDelete
+                    handleDelete,
+                    picHandler
                 }
             }
         }).mount('#app')
