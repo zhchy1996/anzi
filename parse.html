@@ -16,13 +16,20 @@
         <textarea name="" id="" cols="30" rows="20" @change="handleChange"></textarea>
         <textarea name="" id="" cols="30" rows="20" readonly >{{ resVal }}</textarea>
         <button @click="handleCer">法規変換</button>
-        <button @click="handleCer">法規変換</button>
+        <button @click="handleExperiment">実験変換</button>
     </div>
     <script>
         const { createApp, ref } = Vue;
         const strMap = {
             '◯': 'confirm',
+            '○': 'confirm',
+            '◎': 'confirm',
+            '●': 'confirm',
+            '。': 'confirm',
+            '◉': 'confirm',
             '△': 'notsure',
+            '▲': 'notsure',
+            '▼': 'notsure',
             '☓': 'no',
             'default': 'no'
         }
@@ -43,7 +50,6 @@
                 const table = row.map(v => {
                     return v.split('\t');
                 })
-                console.log(table)
                 const res = {};
                 for (let i = 1; i < table.length; i++) {
                     const row = table[i];
@@ -67,9 +73,34 @@
                 resVal.value = JSON.stringify(res);
             }
 
+            function handleExperiment(e) {
+                const str = inputVal;
+                const row = str.split('\n');
+                const table = row.map(v => {
+                    return v.split('\t');
+                })
+                const res = {};
+                console.log(table)
+                for (let i = 1; i < table.length; i++) {
+                    const row = table[i];
+                    if (!row[0]) continue;
+                    const rule = row[0];
+                    if (!res[rule]) {
+                        res[rule] = [];
+                    }
+                    for (let j = 1; j < row.length; j++) {
+                        if (strMap[row[j]] === 'confirm') {
+                            res[rule].push(table[0][j]);
+                        }
+                    }
+                }
+                resVal.value = JSON.stringify(res);
+            }
+
                 return {
                     handleChange,
                     handleCer,
+                    handleExperiment,
                     resVal
                 }
             }

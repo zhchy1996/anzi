@@ -7,34 +7,81 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
         html {
-            min-height: 100%
+            min-height: 100%;
+            background: #eee;
         }
         #app {
-            min-height: 100%
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+            min-height: 100%;
+            margin: 0 auto;
         }
         h4 {
             margin: 0;
         }
+        button {
+            height: 32px;
+            background: #4d6ed8;
+            border: 0;
+            outline: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 8px;
+        }
         .addDialog {
             position: fixed;
-            top: 50%;
+            top: 30%;
             left: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
             transform: translate(-50%, -50%);
             border: 1px solid #000;
             border-radius: 10px;
+            background: #fff;
+            width: 40%;
+            box-shadow: #000;
+        }
+
+        .addDialog .select-wrapper {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .addDialog select {
+            width: 40%;
+        }
+        .addDialog button {
+            margin-top: 10px;
+            height: 32px;
+            width: 30%;
+            background: #4d6ed8;
+            border: 0;
+            outline: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 8px;
         }
         .choosed-list {
             margin-top: 10px;
             padding: 10px;
             border: 1px solid #000;
             border-radius: 10px;
+            width: 100%;
         }
         .certifiedList-wrapper {
             padding: 10px;
             margin-top: 10px;
             border: 1px solid #000;
             border-radius: 10px;
+            width: 100%;
+        }
+        .certifiedList-wrapper > div {
+            border-bottom: 1px solid #000;
+            margin-bottom: 4px;
         }
         .delete {
             color: red;
@@ -86,14 +133,14 @@
                 </select>
             </div>
 
-                <button style="margin-top: 10px" @click="confirm">confirm</button>
+            <button style="margin-top: 10px" @click="confirm">confirm</button>
         </div>
     </div>
 
     <script>
         const certifiedData = {"亚洲":{"A":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"notsure","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"B":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"C":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"},"D":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"confirm","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"非洲":{"E":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"confirm","认证G":"no"},"F":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"北美洲":{"G":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"confirm","认证F":"no","认证G":"no"},"H":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"}}};
 
-        const experimentData = {}
+        const experimentData = {"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":["实验1","实验4"],"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":[],"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":["实验4"],"认证D":[],"认证E":["实验3"],"认证F":[],"认证G":[]}
 
         const { createApp, ref, reactive, computed } = Vue
 
@@ -208,32 +255,13 @@
                 })
 
                 const experimentList = computed(() => {
-                    const countrys = pickedCountrys.value;
-                    const obj = {};
-                    const countrysKeys = Object.keys(countrys)
-                    for (let i = 0; i < countrysKeys.length; i++) {
-                        const {continent, country} = countrys[countrysKeys[i]];
-                        if (!experimentData[continent]) continue;
-                        if (experimentData[continent] && !experimentData[continent][country]) continue;
-                        const cList = Object.keys(experimentData[continent][country]);
-                        for (let j = 0; j < cList.length; j++) {
-                            const key = cList[j];
-                            if (obj[key] !== undefined) {
-                                if (experimentData[continent][country][key]) obj[key] = 1;
-                            } else {
-                                obj[key] = (experimentData[continent][country][key]) ? 1 : 0;
-                            }
-                        }
-                    }
-                    const resKeys = Object.keys(obj);
-                    const res = [];
-                    for (let i = 0; i < resKeys.length; i++) {
-                        if (obj[resKeys[i]]) {
-                            res.push(resKeys[i])
-                        }
-                    }
-                    console.log(obj, res)
-                    return res;
+                    const list = certifiedList.value;
+                    const res = list.reduce((acc, v) => {
+                        acc = [...acc, ...experimentData[v]];
+                        return acc;
+                    }, [])
+                    console.log(res)
+                    return res
                 })
 
                 
