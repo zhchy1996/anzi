@@ -60,6 +60,12 @@
             </div>
         </div>
         <div class="certifiedList-wrapper">
+            <h4>法規要認証</h4>
+            <div v-for="item in notsureList" class="item">
+                {{ item.cer }} - {{ item.country}}
+            </div>
+        </div>
+        <div class="certifiedList-wrapper">
             <h4>必要試験</h4>
             <div v-for="item in experimentList" class="item">
                 {{ item }}
@@ -85,7 +91,7 @@
     </div>
 
     <script>
-        const certifiedData = {"亚洲":{"A":{"认证A":true,"认证B":true,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":false},"B":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":false},"C":{"认证A":false,"认证B":true,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":true},"D":{"认证A":false,"认证B":false,"认证C":true,"认证D":false,"认证E":false,"认证F":false,"认证G":false}},"非洲":{"E":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":true,"认证G":false},"F":{"认证A":true,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":false}},"北美洲":{"G":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":true,"认证F":false,"认证G":false},"H":{"认证A":false,"认证B":false,"认证C":false,"认证D":false,"认证E":false,"认证F":false,"认证G":true}}};
+        const certifiedData = {"亚洲":{"A":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"notsure","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"B":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"C":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"},"D":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"confirm","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"非洲":{"E":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"confirm","认证G":"no"},"F":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"北美洲":{"G":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"confirm","认证F":"no","认证G":"no"},"H":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"}}};
 
         const experimentData = {}
 
@@ -152,9 +158,9 @@
                         for (let j = 0; j < cList.length; j++) {
                             const key = cList[j];
                             if (obj[key] !== undefined) {
-                                if (certifiedData[continent][country][key]) obj[key] = 1;
+                                if (certifiedData[continent][country][key] === 'confirm') obj[key] = 1;
                             } else {
-                                obj[key] = (certifiedData[continent][country][key]) ? 1 : 0;
+                                obj[key] = (certifiedData[continent][country][key] === 'confirm') ? 1 : 0;
                             }
                         }
                     }
@@ -166,6 +172,37 @@
                         }
                     }
                     console.log(obj, res)
+                    return res;
+                })
+
+                const notsureList = computed(() => {
+                    const countrys = pickedCountrys.value;
+                    const obj = {};
+                    const countrysKeys = Object.keys(countrys)
+                    for (let i = 0; i < countrysKeys.length; i++) {
+                        const {continent, country} = countrys[countrysKeys[i]];
+                        const cList = Object.keys(certifiedData[continent][country]);
+                        for (let j = 0; j < cList.length; j++) {
+                            const key = cList[j];
+                            if (obj[key] !== undefined) {
+                                if (certifiedData[continent][country][key] === 'notsure') {
+                                    obj[key].push(`${continent} ${country}`)
+                                }
+                            } else {
+                                obj[key] = (certifiedData[continent][country][key] === 'notsure') ? [`${continent} ${country}`] : 0;
+                            }
+                        }
+                    }
+                    const resKeys = Object.keys(obj);
+                    const res = [];
+                    for (let i = 0; i < resKeys.length; i++) {
+                        if (obj[resKeys[i]]) {
+                            res.push({
+                                cer: resKeys[i],
+                                country: obj[resKeys[i]].join('  ')
+                            })
+                        }
+                    }
                     return res;
                 })
 
@@ -208,6 +245,7 @@
                     pickedCountrys,
                     certifiedList,
                     experimentList,
+                    notsureList,
 
                     addClick,
                     continentChangeHandler,
