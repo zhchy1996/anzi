@@ -9,14 +9,22 @@
         html {
             min-height: 100%;
             background: #eee;
+            margin: 0;
+        }
+        body {
+            margin: 0;
+            padding: 10px 0;
         }
         #app {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: space-between;
             max-width: 800px;
-            min-height: 100%;
             margin: 0 auto;
+            min-height: 100%;
+            min-height: 95vh;
+            box-sizing: border-box;
         }
         h4 {
             margin: 0;
@@ -29,6 +37,12 @@
             color: #fff;
             font-size: 16px;
             border-radius: 8px;
+        }
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
         }
         .addDialog {
             position: fixed;
@@ -87,37 +101,56 @@
             color: red;
             cursor: pointer;
         }
+        .footer {
+            display: flex;
+        }
+        .footer div {
+            margin-right: 12px;
+        }
     </style>
 </head>
 <body>
     <div id="app">
-        <button @click="addClick">仕向地追加</button>
+        <div class="wrapper">
+            <button @click="addClick">仕向地追加</button>
 
-        <div class="choosed-list">
-            <h4>就仕向地</h4>
-            <div v-for="(item, index) in pickedCountrys">
-                {{item.continent}} {{item.country}}
-                <span class="delete" @click="handleDelete(index)">X</span>
+            <div class="choosed-list">
+                <h4>就仕向地</h4>
+                <div v-for="(item, index) in pickedCountrys">
+                    {{item.continent}} {{item.country}}
+                    <span class="delete" @click="handleDelete(index)">X</span>
+                </div>
             </div>
-        </div>
-        <div class="certifiedList-wrapper">
-            <h4>法規・認証</h4>
-            <div v-for="item in certifiedList" class="item">
-                {{ item }}
+            <div class="certifiedList-wrapper">
+                <h4>法規・認証</h4>
+                <div v-for="item in certifiedList" class="item">
+                    {{ item }}
+                </div>
             </div>
-        </div>
-        <div class="certifiedList-wrapper">
-            <h4>法規要認証</h4>
-            <div v-for="item in notsureList" class="item">
-                {{ item.cer }} - {{ item.country}}
+            <div class="certifiedList-wrapper">
+                <h4>法規要認証</h4>
+                <div v-for="item in notsureList" class="item">
+                    {{ item.cer }} - {{ item.country}}
+                </div>
             </div>
-        </div>
-        <div class="certifiedList-wrapper">
-            <h4>必要試験</h4>
-            <div v-for="item in experimentList" class="item">
-                {{ item }}
+            <div class="certifiedList-wrapper">
+                <h4>必要試験</h4>
+                <div v-for="item in experimentList" class="item">
+                    {{ item }}
+                </div>
             </div>
-        </div>
+            </div>
+            <div class="footer">
+                <div>
+                    特殊军事行动
+                </div>
+                <div>
+                    甲乙丙丁
+                </div>
+                <div>
+                    v1.11
+                </div>
+            </div>
 
 
         <div v-if="showAdd" class="addDialog">
