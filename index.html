@@ -172,11 +172,11 @@
                 }
 
                 function confirm() {
+                    if (!continent.value || !countryValue.value) return;
                     pickedCountrys.value.push({
                         continent: continent.value,
                         country: countryValue.value
                     })
-                    console.log(pickedCountrys.value)
                     resetDialog();
                 }
 
