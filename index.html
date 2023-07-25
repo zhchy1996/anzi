@@ -114,7 +114,7 @@
                     const {value} = e.target;
                     if (value === 'empty') return;
                     continentValue.value = value;
-                    countryList.value= Object.keys(certifiedData[continentValue.value]);
+                    // countryList.value= Object.keys(certifiedData[continentValue.value]);
                 }
 
                 function countryChangeHandler(e) {
@@ -129,6 +129,7 @@
                         continent: continent.value,
                         country: countryValue.value
                     })
+                    console.log(pickedCountrys.value)
                     resetDialog();
                 }
 
@@ -189,14 +190,14 @@
                                     obj[key].push(`${continent} ${country}`)
                                 }
                             } else {
-                                obj[key] = (certifiedData[continent][country][key] === 'notsure') ? [`${continent} ${country}`] : 0;
+                                obj[key] = (certifiedData[continent][country][key] === 'notsure') ? [`${continent} ${country}`] : [];
                             }
                         }
                     }
                     const resKeys = Object.keys(obj);
                     const res = [];
                     for (let i = 0; i < resKeys.length; i++) {
-                        if (obj[resKeys[i]]) {
+                        if (obj[resKeys[i]].length !== 0) {
                             res.push({
                                 cer: resKeys[i],
                                 country: obj[resKeys[i]].join('  ')
