@@ -119,6 +119,12 @@
 <body>
     <div id="app">
         <div class="wrapper">
+            <select name="continent" id="continent" @change="typeChangeHandler" >
+                <option v-for="item in typeList" :value="item.val">
+                    {{ item.label }}
+                </option>
+            </select>
+
             <button @click="addClick">仕向地追加</button>
 
             <div class="choosed-list">
@@ -180,24 +186,44 @@
     </div>
 
     <script>
-        const certifiedData = {"亚洲":{"A":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"notsure","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"B":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"C":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"confirm","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"},"D":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"confirm","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"非洲":{"E":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"confirm","认证G":"no"},"F":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"北美洲":{"G":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"confirm","认证F":"no","认证G":"no"},"H":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"}}};
+        const data = {
+            certifiedData: {"亚洲":{"A":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"notsure","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"B":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"C":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"confirm","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"},"D":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"confirm","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"非洲":{"E":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"confirm","认证G":"no"},"F":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"北美洲":{"G":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"confirm","认证F":"no","认证G":"no"},"H":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"}}},
 
-        const experimentData = {"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":["实验1","实验4"],"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":[],"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":["实验4"],"认证D":[],"认证E":["实验3"],"认证F":[],"认证G":[]};
+            experimentData: {"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":["实验1","实验4"],"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":[],"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":["实验4"],"认证D":[],"认证E":["实验3"],"认证F":[],"认证G":[]},
+
+            labelingCertified: {"亚洲":{"A":{"test":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"notsure","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"B":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"notsure","认证E":"no","认证F":"no","认证G":"no"},"C":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"confirm","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"},"D":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"confirm","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"非洲":{"E":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"confirm","认证G":"no"},"F":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"confirm","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"no"}},"北美洲":{"G":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"confirm","认证F":"no","认证G":"no"},"H":{"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要":"notsure","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":"no","エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":"no","认证D":"no","认证E":"no","认证F":"no","认证G":"confirm"}}},
+
+            labelingExperiment: {"test":["实验1test","实验4"],"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要2":[],"エクアドル対応ECE30とINMETROまたはSNIまたはCCCが必要3":["实验4"],"认证D":[],"认证E":["实验3"],"认证F":[],"认证G":[]}
+        }
+
 
         const { createApp, ref, reactive, computed } = Vue
 
         createApp({
             setup() {
-                const continentList = reactive(Object.keys(certifiedData));
+                const continentList = reactive(Object.keys(data.certifiedData));
                 const showAdd = ref(false);
                 let continentValue = ref('');
                 let countryValue = ref('');
                 let pickedCountrys = ref([]);
                 const picVisible = ref({});
+                const typeList = ref([{
+                    val: 'country',
+                    label: '国家'
+                }, {
+                    val: 'labeling',
+                    label: 'ラベリング'
+                }]);
+                let type = ref(typeList.value[0].val);
 
                 // methods
                 function addClick() {
                     showAdd.value = true;
+                }
+
+                function typeChangeHandler(e) {
+                    const {value} = e.target;
+                    type.value = value;
                 }
 
                 function continentChangeHandler(e) {
@@ -215,9 +241,10 @@
                 }
 
                 function confirm() {
-                    if (!continent.value || !countryValue.value) return;
+                    console.log(continent.value, countryValue.value)
+                    if (!continentValue.value || !countryValue.value) return;
                     pickedCountrys.value.push({
-                        continent: continent.value,
+                        continent: continentValue.value,
                         country: countryValue.value
                     })
                     resetDialog();
@@ -237,16 +264,36 @@
                     picVisible.value[index] = val;
                 }
 
+                function getCertifiedData() {
+                    const dataMap = {
+                        country: 'certifiedData',
+                        labeling: 'labelingCertified'
+                    }
+                    const {value} = type;
+                    return data[dataMap[value]]
+                }
+
+                function getExperimentData() {
+                    const dataMap = {
+                        country: 'experimentData',
+                        labeling: 'labelingExperiment'
+                    }
+                    const {value} = type;
+                    return data[dataMap[value]]
+                }
+
                 // computed
                 const countryList = computed(() => {
                     if (!continentValue.value) return [];
-                    return Object.keys(certifiedData[continentValue.value]);
+                    return Object.keys(getCertifiedData()[continentValue.value]);
                 })
 
                 const certifiedList = computed(() => {
                     const countrys = pickedCountrys.value;
+                    if (!countrys[0]) return [];
                     const obj = {};
                     const countrysKeys = Object.keys(countrys)
+                    const certifiedData = getCertifiedData();
                     for (let i = 0; i < countrysKeys.length; i++) {
                         const {continent, country} = countrys[countrysKeys[i]];
                         const cList = Object.keys(certifiedData[continent][country]);
@@ -272,8 +319,10 @@
 
                 const notsureList = computed(() => {
                     const countrys = pickedCountrys.value;
+                    if (!countrys[0]) return [];
                     const obj = {};
                     const countrysKeys = Object.keys(countrys)
+                    const certifiedData = getCertifiedData();
                     for (let i = 0; i < countrysKeys.length; i++) {
                         const {continent, country} = countrys[countrysKeys[i]];
                         const cList = Object.keys(certifiedData[continent][country]);
@@ -304,7 +353,8 @@
                 const experimentList = computed(() => {
                     const list = certifiedList.value;
                     const res = list.reduce((acc, v) => {
-                        acc = [...acc, ...experimentData[v]];
+                        const val = getExperimentData();
+                        acc = [...acc, ...(val[v] || [])];
                         return acc;
                     }, [])
                     return Array.from(new Set(res));
@@ -322,13 +372,15 @@
                     experimentList,
                     notsureList,
                     picVisible,
+                    typeList,
 
                     addClick,
                     continentChangeHandler,
                     countryChangeHandler,
                     confirm,
                     handleDelete,
-                    picHandler
+                    picHandler,
+                    typeChangeHandler,
                 }
             }
         }).mount('#app')
